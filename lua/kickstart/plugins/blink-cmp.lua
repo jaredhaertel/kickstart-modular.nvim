@@ -30,8 +30,22 @@ return {
         },
         opts = {},
       },
+      {
+        'micangl/cmp-vimtex',
+        ft = 'tex',
+        config = function()
+          require('cmp_vimtex').setup {}
+        end,
+      },
+      {
+        'saghen/blink.compat',
+        version = '*',
+        opts = { impersonate_nvim_cmp = false },
+      },
       'folke/lazydev.nvim',
     },
+    lazy = false,
+    opts_extend = { 'sources.completion.enabled_providers' },
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config
     opts = {
@@ -76,9 +90,14 @@ return {
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'path', 'snippets', 'lazydev', 'buffer', 'vimtex', 'cmdline' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          vimtex = {
+            name = 'vimtex',
+            module = 'blink.compat.source',
+            score_offset = 3,
+          },
         },
       },
 

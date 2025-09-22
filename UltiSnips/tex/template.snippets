@@ -1,0 +1,259 @@
+snippet hw "Math template" b
+\documentclass[leqno]{article} % Sets the basic 'template' for the general layout of the document. leqno puts equation numbers on the left.
+
+%-------------------------------------------------------------------%
+% Packages                                                          %
+%-------------------------------------------------------------------%
+
+\usepackage[margin=1.5in]{geometry} % Makes margins larger
+\usepackage[utf8]{inputenc} % Specifies TeX to process the symbols you type as unicode symbols ("utf8" stands for "Unicode Transformation Format 8")
+\usepackage{amsmath} % Provides many features for documents containing mathematical formulas
+\usepackage{amsthm} % Helps to define theorem-like structures
+\usepackage[upint]{stix2} % Changes font to the stix2 fonts, which provides extended symbols
+\usepackage{inconsolata} % Nicer monospaced font
+\usepackage[shortlabels]{enumitem} % Allows for a lot of options with lists
+\setlist[enumerate]{
+     itemsep  = 0.2cm,
+       label  = {\upshape (\arabic*)},
+         ref  = \arabic*,
+    leftmargin  = *
+} % Sets default list label to be upright of the form (n)
+\usepackage{xcolor} % To use colors
+\usepackage{tikz-cd} % For generating commutative diagrams
+\tikzcdset{arrow style=tikz, diagrams={>={Computer Modern Rightarrow[width=5pt,length=3pt]}}} % Makes the size of the arrow tips more reasonable
+\usepackage[colorlinks,allcolors=blue]{hyperref} % You can change the colors of various parts of this package, but here I change all of them
+\usepackage[nameinlink]{cleveref} % For easy internal referencing
+\usepackage[final]{microtype}
+\usepackage{todonotes} % For including comments that appear in the pdf you can use \todo{text} or \todo[inline]{text}
+
+\usepackage{CJKutf8} % Allows for Chinese, Japanese, and Korean input.
+\usepackage{mathtools}
+
+% Math mode よ (yo) for the Yoneda embedding 
+\newcommand{\yo}{\begin{CJK}{UTF8}{min} \CJKfamily{goth} \mathchoice{\ensuremath{\text{\footnotesize よ}}}{\ensuremath{\text{\footnotesize よ}}}{\ensuremath{\text{\footnotesize ょ}}}{\ensuremath{\text{\tiny ょ}}} \end{CJK}}
+
+%-------------------------------------------------------------------%
+% newtheorems                                                       %
+%-------------------------------------------------------------------%
+
+\numberwithin{equation}{section} % Numbers equations within the section. E.g., the n-th equation of Section s is numbered (s.n)
+\newtheorem{corollary}[equation]{Corollary} % This is where you add environment labels. The first brackets contain what you will put in the environment code. The second label is what will be outputted in the PDF.
+\newtheorem{lemma}[equation]{Lemma}
+\newtheorem{proposition}[equation]{Proposition}
+\newtheorem{theorem}[equation]{Theorem}
+
+\theoremstyle{definition} % Makes text in the environment upright
+\newtheorem{construction}[equation]{Construction}
+\newtheorem{example}[equation]{Example}
+\newtheorem{definition}[equation]{Definition}
+\newtheorem{remark}[equation]{Remark}
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+% newcommands                                                       %
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+
+% Some basic macros that you can use to simplify your LaTeX code. You should add whatever you think would be helpful!
+
+%-------------------------------------------------------------------%
+% Blackboard bold                                                   %
+%-------------------------------------------------------------------%
+
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\ZZ}{\mathbb{Z}}
+
+% Probability
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+
+
+%-------------------------------------------------------------------%
+% Caligriphic                                                       %
+%-------------------------------------------------------------------%
+
+\newcommand{\Ccal}{\mathcal{C}}
+
+%-------------------------------------------------------------------%
+% Fraktur                                                           %
+%-------------------------------------------------------------------%
+
+\newcommand{\mfrak}{\mathfrak{m}}
+\newcommand{\pfrak}{\mathfrak{p}}
+\newcommand{\qfrak}{\mathfrak{q}}
+
+%-------------------------------------------------------------------%
+% Commutative algebra                                               %
+%-------------------------------------------------------------------%
+
+\DeclareMathOperator{\Frac}{Frac}
+
+%-------------------------------------------------------------------%
+% Category theory                                                   %
+%-------------------------------------------------------------------%
+
+\DeclareMathOperator{\Hom}{Hom}
+
+%-------------------------------------------------------------------%
+% Sheaf theory                                                      %
+%-------------------------------------------------------------------%
+
+\DeclareMathOperator{\PSh}{PSh}
+\DeclareMathOperator{\Sh}{Sh}
+
+%-------------------------------------------------------------------%
+% Algebraic geometry                                                %
+%-------------------------------------------------------------------%
+
+\DeclareMathOperator{\Spec}{Spec}
+
+%-------------------------------------------------------------------%
+% Text in math mode                                                 %
+%-------------------------------------------------------------------%
+
+\newcommand{\comma}{\rlap{\ ,}}
+\newcommand{\period}{\rlap{\ .}}
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+%  References                                                       %
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+
+%-------------------------------------------------------------------%
+%  Biblatex basic global styling                                    %
+%-------------------------------------------------------------------%
+
+% url=false removes '[Online] Available: _repetition of DOI_'
+\usepackage[style=ieee,citestyle=numeric,backend=biber,sorting=nyt,url=false]{biblatex}
+
+\AtEveryBibitem{\clearfield{issn}}	% Removes ISSN (retains ISBN)
+\AtEveryCitekey{\clearfield{issn}}
+\AtBeginBibliography{\small}		% Sets references font size
+
+% Uses a semicolon delimeter for multiple citations
+\renewcommand{\multicitedelim}{\addsemicolon\space}
+
+% Removes the "p." when just a number is referenced
+\DeclareFieldFormat{postnote}{#1}
+
+% Uniformly italicizes title of all works
+\DeclareFieldFormat[article,inbook,incollection,inproceedings,patent,thesis,unpublished]{title}{\textit{#1\isdot}} 
+
+\DeclareFieldFormat{journaltitle}{#1}  % Makes Journal title in normal text
+
+% Takes away the "ser." in front of Series Title that is part of the ieee styling
+\DeclareFieldFormat[book,inbook,incollection,inproceedings]{series}{#1} 
+
+% Does sectioning and addition of references to table of contents correctly in article documentclass.
+\defbibheading{references}[\refname]{%
+\section*{#1}%
+\addcontentsline{toc}{section}{References} %
+\markboth{#1}{#1}
+}
+
+%-------------------------------------------------------------------%
+%  For easy hyperlinks to Stacks project citations                          %
+%-------------------------------------------------------------------%
+
+\newcommand{\stackslink}[1]{\href{http://stacks.math.columbia.edu/tag/#1}{#1}} % For use with multiple references
+\newcommand{\stackstag}[1]{\href{http://stacks.math.columbia.edu/tag/#1}{Tag #1}} 
+\newcommand{\stacks}[1]{\cite[\stackstag{#1}]{stacks_project}} % Use: \stacks{Tag_Number}
+
+%-------------------------------------------------------------------%
+%  Bibliography file                                                %
+%-------------------------------------------------------------------%
+
+\addbibresource{references.bib} % Adds the file file_name.bib to use in the bibliography
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+%  Title data                                                       %
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+
+\title{$1 HW $2}
+\author{Jared Haertel}
+\date{\today}
+
+\begin{document} % Only what you write between here and \end{document} will be printed in the pdf
+
+\maketitle % Prints the title, author, and date
+
+$0
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+% Sources consulted                                                 %
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+
+\section*{Sources consulted} 
+
+Emmy Noether.
+
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+% References                                                        %
+%-------------------------------------------------------------------%
+%-------------------------------------------------------------------%
+
+\nocite{*} % This prints all bibliography referecnes. If you only want to print the ones you used, remove this.
+
+\printbibliography % Prints the bibliography
+
+\end{document}
+endsnippet
+
+snippet template "Basic template" b
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts, fancyhdr, color, comment, graphicx, environ, mathtools, xifthen, stackengine, esdiff}
+\usepackage[mathscr]{euscript}
+\let\euscr\mathscr \let\mathscr\relax
+\usepackage[scr]{rsfso}
+\usepackage{tikz-cd} 
+\usepackage[shortlabels]{enumitem}
+\usepackage{changepage}% http://ctan.org/pkg/changepage
+
+\pagestyle{fancy}
+\setlength{\headheight}{20pt}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]\itshape}{\end{trivlist}}
+\newenvironment{sol}
+    {\emph{Solution:}
+    }
+    {
+    \qed
+    }
+\specialcomment{com}{ \color{blue} \textbf{Comment:} }{\color{black}} %for instructor comments while grading
+\NewEnviron{probscore}{\marginpar{ \color{blue} \tiny Problem Score: \BODY \color{black} }}
+
+\usetikzlibrary{calc,decorations.markings}
+\graphicspath{ {./images/} }
+
+\lhead{Jared Haertel}
+\rhead{Math $1 \\\ Fall 2024 \\\ Assignment \# $2}
+
+\newtheorem{innercustomgeneric}{\customgenericname}
+\providecommand{\customgenericname}{}
+\newcommand{\newcustomtheorem}[2]{%
+  \newenvironment{#1}[1]
+  {%
+   \renewcommand\customgenericname{#2}%
+   \renewcommand\theinnercustomgeneric{##1}%
+   \innercustomgeneric
+  }
+  {\endinnercustomgeneric}
+}
+
+\newcustomtheorem{customthm}{Theorem}
+\newcustomtheorem{customlemma}{Lemma}
+
+
+\begin{document}
+	$0
+\end{document}
+endsnippet

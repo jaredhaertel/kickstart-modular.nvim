@@ -36,6 +36,13 @@ return {
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        cpp = { 'cpp_formatter' },
+      },
+      formatters = {
+        cpp_formatter = {
+          command = 'clang-format',
+          args = '--style="{BasedOnStyle: llvm, IndentWidth: 4}"',
+        },
       },
     },
   },
